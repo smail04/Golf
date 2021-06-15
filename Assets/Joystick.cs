@@ -43,4 +43,5 @@ public class Joystick : MonoBehaviour
     {
         return stickTransform.position - boundTransform.position;    
     }
+
 }

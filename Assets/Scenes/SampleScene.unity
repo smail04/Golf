@@ -3527,6 +3527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee48895e891d234abd5ec6e975b67d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spectator: {fileID: 1774472126}
   joystick: {fileID: 393872398}
   arrow: {fileID: 1494234631}
   state: 1

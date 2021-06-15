@@ -9,20 +9,20 @@ public enum BallState
 }
 public class Ball : MonoBehaviour
 {
+    public Transform spectator;
     public Joystick joystick;
     public Transform arrow;
     public BallState state;
     public Rigidbody _rigidbody;
-    Vector3 arrowTarget = Vector3.zero;
-
+    Vector3 forwardSpectatorDirection;
+    float force;
     private void Start()
     {
-        
+
     }
 
     private void Update()
     {
-        Debug.Log(_rigidbody.velocity.magnitude);
         if (_rigidbody.velocity.magnitude < 0.4)
         {
             _rigidbody.velocity = Vector3.zero;
@@ -44,7 +44,6 @@ public class Ball : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                //joystick.Show();
                 arrow.gameObject.SetActive(true);
             }
 
@@ -52,16 +51,19 @@ public class Ball : MonoBehaviour
             {
                 joystick.SetStickPosition(Input.mousePosition);
                 Vector2 pos = joystick.GetPositionRelativeToCenter() / 10f;
-                arrowTarget = transform.position + new Vector3(-pos.x, 0, -pos.y);
+                force = Mathf.Clamp(pos.magnitude, 0, 40); Debug.Log(force);
+                spectator.Rotate(new Vector3(0, -pos.x, 0) / 5, Space.World);
+
                 arrow.position = transform.position;
-                arrow.LookAt(arrowTarget, Vector3.up);
+                forwardSpectatorDirection = new Vector3(spectator.forward.x, 0, spectator.forward.z);
+                Vector3 arrowTargetPosition = transform.position + (forwardSpectatorDirection * force);
+                arrow.LookAt(arrowTargetPosition, Vector3.up);
             }        
 
             if (Input.GetMouseButtonUp(0))
             {
-                //joystick.Hide();
                 arrow.gameObject.SetActive(false);
-                _rigidbody.AddForce(arrowTarget - transform.position, ForceMode.VelocityChange);
+                _rigidbody.AddForce(forwardSpectatorDirection * force, ForceMode.VelocityChange);
             }
         }
     }
