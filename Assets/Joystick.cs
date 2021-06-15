@@ -25,6 +25,7 @@ public class Joystick : MonoBehaviour
     {
         boundImage.enabled = true;
         stickImage.enabled = true;
+        stickTransform.position = boundTransform.position;
     }
 
     public void Hide()

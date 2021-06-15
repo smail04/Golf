@@ -22,16 +22,29 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(_rigidbody.velocity.magnitude);
+        if (_rigidbody.velocity.magnitude < 0.4)
+        {
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+
         if (_rigidbody.velocity.magnitude == 0)
+        {
             state = BallState.Stopped;
+            joystick.Show();
+        }
         else
+        {
             state = BallState.Moving;
+            joystick.Hide();
+        }
 
         if (state == BallState.Stopped)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                joystick.Show();
+                //joystick.Show();
                 arrow.gameObject.SetActive(true);
             }
 
@@ -46,7 +59,7 @@ public class Ball : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0))
             {
-                joystick.Hide();
+                //joystick.Hide();
                 arrow.gameObject.SetActive(false);
                 _rigidbody.AddForce(arrowTarget - transform.position, ForceMode.VelocityChange);
             }
