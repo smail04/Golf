@@ -70,6 +70,8 @@ public class Ball : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
             arrow.gameObject.SetActive(false);
             _rigidbody.AddForce(forwardSpectatorDirection * force, ForceMode.VelocityChange);
             joystick.Hide();
