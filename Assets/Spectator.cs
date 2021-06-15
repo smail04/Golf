@@ -9,6 +9,7 @@ public class Spectator : MonoBehaviour
 
     void Update()
     {
-        transform.position = Vector3.Lerp(transform.position, ball.position, Time.deltaTime * lerpDrag);
+        //transform.position = Vector3.Lerp(transform.position, ball.position, Time.deltaTime * lerpDrag * (1f / Time.timeScale));
+        transform.position = ball.position;
     }
 }
