@@ -42,14 +42,14 @@ public class Ball : MonoBehaviour
 
         //if (state == BallState.Stopped)
         //{
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             arrow.gameObject.SetActive(true);
             joystick.Show();
                 
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
             joystick.SetStickPosition(Input.mousePosition);
             Vector2 pos = joystick.GetPositionRelativeToCenter() / 10f;
@@ -68,7 +68,7 @@ public class Ball : MonoBehaviour
             //}
         }        
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(1))
         {
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
