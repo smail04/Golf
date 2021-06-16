@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Joystick : MonoBehaviour
+public class Joystick : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public GameObject bound;
     public GameObject stick;
@@ -11,6 +13,8 @@ public class Joystick : MonoBehaviour
     private RectTransform stickTransform;
     private Image boundImage;
     private Image stickImage;
+    public UnityEvent onBeginDrag;
+    public UnityEvent onEndDrag;
 
     private void Awake()
     {
@@ -44,4 +48,20 @@ public class Joystick : MonoBehaviour
         return stickTransform.position - boundTransform.position;    
     }
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Show();
+        onBeginDrag.Invoke();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        SetStickPosition(Input.mousePosition);
+    }   
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Hide();
+        onEndDrag.Invoke();
+    }
 }

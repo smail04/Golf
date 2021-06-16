@@ -9,12 +9,12 @@ public class Spectator : MonoBehaviour
 
     void Update()
     {
-        //transform.position = Vector3.Lerp(transform.position, ball.position, Time.deltaTime * lerpDrag * (1f / Time.timeScale));
         transform.position = ball.position;
     }
 
     public void Rotate(Vector3 rotation, float speed)
     {
+        Debug.Log(rotation * speed);
         transform.Rotate(rotation * speed, Space.World);
     }
 }

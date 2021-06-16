@@ -6,20 +6,23 @@ using UnityEngine.EventSystems;
 public class RotationBar : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Spectator spectator;
-
+    private float prevPoint = 0;
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        prevPoint = Input.mousePosition.x;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        float horizontalPosition = Input.mousePosition.x - Screen.width / 2f;
-        spectator.Rotate(new Vector3(0, -horizontalPosition, 0), 0.1f);
+        if (prevPoint != 0)
+        {
+            spectator.Rotate(new Vector3(0, -(prevPoint - Input.mousePosition.x), 0), 0.1f);
+        }
+        prevPoint = Input.mousePosition.x;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        prevPoint = 0;
     }
 }
