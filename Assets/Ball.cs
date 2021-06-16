@@ -14,6 +14,14 @@ public class Ball : MonoBehaviour
     public Transform arrow;
     public BallState state;
     public Rigidbody _rigidbody;
+    Vector3 startPosition;
+    Quaternion startRotation;
+
+    private void Start()
+    {
+        startPosition = transform.position;
+        startRotation = spectator.rotation;
+    }
 
     private void Update()
     {
@@ -30,6 +38,18 @@ public class Ball : MonoBehaviour
             Aim();
         }
 
+        if (transform.position.y < -5)
+        {
+            MoveToStart();
+        }
+
+    }
+
+    public void MoveToStart()
+    {
+        ForceStop();
+        transform.position = startPosition;
+        spectator.rotation = startRotation;
     }
 
     public void Charge()
@@ -65,7 +85,7 @@ public class Ball : MonoBehaviour
 
     public void ForceStop()
     {
-        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
         _rigidbody.angularVelocity = Vector3.zero;
     }
 
