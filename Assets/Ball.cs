@@ -16,10 +16,14 @@ public class Ball : MonoBehaviour
     public Rigidbody _rigidbody;
     public TrajectorySimulation trajectorySimulation;
     public ParticleSystem particles;
-    [Range(0,20)] public float joystickRotationSensetivity = 5;
-         
+    public TrailRenderer trail;
+    public Menu menu;
+    [Range(0, 20)] private float joystickRotationSensetivity = 5;
+
     Vector3 startPosition;
     Quaternion startRotation;
+
+    public float JoystickRotationSensetivity { get => joystickRotationSensetivity; set => joystickRotationSensetivity = value; }
 
     private void Start()
     {
@@ -64,10 +68,11 @@ public class Ball : MonoBehaviour
     }
 
     public void MoveToStart()
-    {
+    {        
         ForceStop();
         transform.position = startPosition;
         spectator.transform.rotation = startRotation;
+        trail.Clear();
     }
 
     public void Charge()
@@ -80,7 +85,7 @@ public class Ball : MonoBehaviour
 
     public void Aim()
     {
-        spectator.Rotate(new Vector3(0, -joystick.GetPositionRelativeToCenter().x / 10f, 0), joystickRotationSensetivity * Time.deltaTime);
+        spectator.Rotate(new Vector3(0, ((menu.JoystickControlInverted)? -1 : 1) * joystick.GetPositionRelativeToCenter().x / 10f, 0), JoystickRotationSensetivity * Time.deltaTime);
 
         Vector3 force = GetForceBasedOnJoystickPosition();
         trajectorySimulation.SimulatePath(gameObject, new Vector3(force.x, _rigidbody.velocity.y, force.z));
@@ -93,7 +98,7 @@ public class Ball : MonoBehaviour
 
         spectator.ChangeFOVSmoothly(50, 9);
         spectator.VerticalTiltSmoothly(25, 9);
-
+        Debug.Log(Mathf.Abs(joystick.GetPositionRelativeToCenter().y));
     }
 
     public void Release()
@@ -116,7 +121,7 @@ public class Ball : MonoBehaviour
 
     private Vector3 GetForceBasedOnJoystickPosition()
     {
-        float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude / 3, 0, 50);
+        float force = Mathf.Clamp(Mathf.Abs(joystick.GetPositionRelativeToCenter().y) / 3, 0, 50);
         return new Vector3(spectator.transform.forward.x, 0, spectator.transform.forward.z) * force;
     }
 
