@@ -14,6 +14,9 @@ public class Ball : MonoBehaviour
     public Transform arrow;
     public BallState state;
     public Rigidbody _rigidbody;
+    public TrajectoryRenderer trajectoryRenderer;
+    public float forceMultiplier;
+
     Vector3 startPosition;
     Quaternion startRotation;
 
@@ -43,6 +46,7 @@ public class Ball : MonoBehaviour
             MoveToStart();
         }
 
+        //trajectoryRenderer.transform.position = transform.position;
     }
 
     public void MoveToStart()
@@ -63,6 +67,10 @@ public class Ball : MonoBehaviour
         Vector2 pos = joystick.GetPositionRelativeToCenter() / 10f;
         spectator.Rotate(new Vector3(0, -pos.x, 0) / 15, Space.World);
 
+        float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude, 0, 50);
+        Vector3 speed = new Vector3(spectator.forward.x, 0, spectator.forward.z) * force * forceMultiplier;
+        trajectoryRenderer.ShowTrajectory(transform.position, new Vector3(speed.x, _rigidbody.velocity.y, speed.z),_rigidbody.drag, _rigidbody.mass);
+
         Vector3 arrowTargetPosition = transform.position + new Vector3(spectator.forward.x, 0, spectator.forward.z);
         
         arrow.LookAt(arrowTargetPosition, Vector3.up);
@@ -76,8 +84,8 @@ public class Ball : MonoBehaviour
     {
         ForceStop();
         arrow.gameObject.SetActive(false);
-        float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude, 0, 40);
-        _rigidbody.AddForce(new Vector3(spectator.forward.x, 0, spectator.forward.z) * force, ForceMode.VelocityChange);
+        float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude, 0, 50);
+        _rigidbody.AddForce(new Vector3(spectator.forward.x, 0, spectator.forward.z) * force * forceMultiplier, ForceMode.VelocityChange);
         Time.timeScale = 1;
         Camera.main.fieldOfView = 60;
         state = BallState.Moving;
