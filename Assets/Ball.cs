@@ -9,21 +9,22 @@ public enum BallState
 }
 public class Ball : MonoBehaviour
 {
-    public Transform spectator;
+    public Spectator spectator;
     public Joystick joystick;
     public Transform arrow;
     public BallState state;
     public Rigidbody _rigidbody;
     public TrajectorySimulation trajectorySimulation;
     public float forceMultiplier;
-
+    [Range(0,20)] public float joystickRotationSensetivity = 5;
+         
     Vector3 startPosition;
     Quaternion startRotation;
 
     private void Start()
     {
         startPosition = transform.position;
-        startRotation = spectator.rotation;
+        startRotation = spectator.transform.rotation;
     }
 
     private void Update()
@@ -57,7 +58,7 @@ public class Ball : MonoBehaviour
     {
         ForceStop();
         transform.position = startPosition;
-        spectator.rotation = startRotation;
+        spectator.transform.rotation = startRotation;
     }
 
     public void Charge()
@@ -69,14 +70,14 @@ public class Ball : MonoBehaviour
     public void Aim()
     {
         Vector2 pos = joystick.GetPositionRelativeToCenter() / 10f;
-        spectator.Rotate(new Vector3(0, -pos.x, 0) / 15, Space.World);
+        spectator.Rotate(new Vector3(0, -pos.x, 0), joystickRotationSensetivity * Time.deltaTime);
 
         float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude, 0, 50);
-        Vector3 speed = new Vector3(spectator.forward.x, 0, spectator.forward.z) * force * forceMultiplier;
+        Vector3 speed = new Vector3(spectator.transform.forward.x, 0, spectator.transform.forward.z) * force * forceMultiplier;
 
         trajectorySimulation.SimulatePath(gameObject, new Vector3(speed.x, _rigidbody.velocity.y, speed.z));
 
-        Vector3 arrowTargetPosition = transform.position + new Vector3(spectator.forward.x, 0, spectator.forward.z);
+        Vector3 arrowTargetPosition = transform.position + new Vector3(spectator.transform.forward.x, 0, spectator.transform.forward.z);
         
         arrow.LookAt(arrowTargetPosition, Vector3.up);
         arrow.position = transform.position;
@@ -90,7 +91,7 @@ public class Ball : MonoBehaviour
         ForceStop();
         arrow.gameObject.SetActive(false);
         float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude, 0, 50);
-        _rigidbody.AddForce(new Vector3(spectator.forward.x, 0, spectator.forward.z) * force * forceMultiplier, ForceMode.VelocityChange);
+        _rigidbody.AddForce(new Vector3(spectator.transform.forward.x, 0, spectator.transform.forward.z) * force * forceMultiplier, ForceMode.VelocityChange);
         Time.timeScale = 1;
         Camera.main.fieldOfView = 60;
         state = BallState.Moving;
