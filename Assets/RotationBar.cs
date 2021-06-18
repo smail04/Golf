@@ -16,7 +16,7 @@ public class RotationBar : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     {
         if (prevPoint != 0)
         {
-            spectator.Rotate(new Vector3(0, -(prevPoint - Input.mousePosition.x), 0), 0.1f);
+            spectator.Rotate(new Vector3(0, -(prevPoint - Input.mousePosition.x), 0), 0.5f);
         }
         prevPoint = Input.mousePosition.x;
     }

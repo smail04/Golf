@@ -6,6 +6,12 @@ public class Finish : MonoBehaviour
 {
     public Level level;
     private bool isActive = true;
+    private LevelSwitcher levelSwitcher;
+
+    private void Start()
+    {
+        levelSwitcher = FindObjectOfType<LevelSwitcher>();
+    }
 
     private void Update()
     {
@@ -25,13 +31,13 @@ public class Finish : MonoBehaviour
     private void FinishLevel()
     {
         Invoke(nameof(LoadNextLevel), 2);
-        LevelSwitcher.instance.StartFadeIn();
+        levelSwitcher.StartFadeIn();
     }
 
     public void LoadNextLevel()
     {
-        LevelSwitcher.instance.LoadNextLevel();
-        LevelSwitcher.instance.StartFadeOut();
+        levelSwitcher.LoadNextLevel();
+        levelSwitcher.StartFadeOut();
         isActive = true;
     }
 }

@@ -51,7 +51,6 @@ public class Ball : MonoBehaviour
             MoveToStart();
         }
 
-        //trajectoryRenderer.transform.position = transform.position;
     }
 
     public void MoveToStart()

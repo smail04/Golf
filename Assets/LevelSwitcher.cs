@@ -12,6 +12,11 @@ public class LevelSwitcher : MonoBehaviour
     [SerializeField] private Ball player;    
     [SerializeField] private Image fadeImage;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         instance = this;

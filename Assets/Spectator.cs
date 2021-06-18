@@ -33,7 +33,6 @@ public class Spectator : MonoBehaviour
 
     public void Rotate(Vector3 rotation, float speed)
     {
-        Debug.Log(rotation * speed);
         transform.Rotate(rotation * speed, Space.World);
     }
 }
