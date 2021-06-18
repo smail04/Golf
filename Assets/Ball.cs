@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     public Transform arrow;
     public BallState state;
     public Rigidbody _rigidbody;
-    public TrajectoryRenderer trajectoryRenderer;
+    public TrajectorySimulation trajectorySimulation;
     public float forceMultiplier;
 
     Vector3 startPosition;
@@ -38,7 +38,12 @@ public class Ball : MonoBehaviour
 
         if (state == BallState.Aiming)
         {
+            trajectorySimulation.Enabled = true;
             Aim();
+        }
+        else 
+        {
+            trajectorySimulation.Enabled = false;
         }
 
         if (transform.position.y < -5)
@@ -69,7 +74,8 @@ public class Ball : MonoBehaviour
 
         float force = Mathf.Clamp(joystick.GetPositionRelativeToCenter().magnitude, 0, 50);
         Vector3 speed = new Vector3(spectator.forward.x, 0, spectator.forward.z) * force * forceMultiplier;
-        trajectoryRenderer.ShowTrajectory(transform.position, new Vector3(speed.x, _rigidbody.velocity.y, speed.z),_rigidbody.drag, _rigidbody.mass);
+
+        trajectorySimulation.SimulatePath(gameObject, new Vector3(speed.x, _rigidbody.velocity.y, speed.z));
 
         Vector3 arrowTargetPosition = transform.position + new Vector3(spectator.forward.x, 0, spectator.forward.z);
         
