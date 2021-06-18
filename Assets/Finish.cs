@@ -5,6 +5,7 @@ using UnityEngine;
 public class Finish : MonoBehaviour
 {
     public Level level;
+    private bool isActive = true;
 
     private void Update()
     {
@@ -14,8 +15,9 @@ public class Finish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Ball>())
+        if (other.GetComponent<Ball>() && isActive)
         {
+            isActive = false;
             FinishLevel();            
         }
     }
@@ -30,5 +32,6 @@ public class Finish : MonoBehaviour
     {
         LevelSwitcher.instance.LoadNextLevel();
         LevelSwitcher.instance.StartFadeOut();
+        isActive = true;
     }
 }
